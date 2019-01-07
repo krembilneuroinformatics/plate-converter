@@ -4,7 +4,7 @@ Usage:
 
 `convert24plate.py <inputfile> <outputfile>`
 
-`<inputfile> Name of the excel spreadsheet to convert`
+`<inputfile>` Name of the excel spreadsheet to convert
 
-`<outputfile> Name of the output file ending in .csv`
+`<outputfile>` Name of the output file ending in .csv
 
