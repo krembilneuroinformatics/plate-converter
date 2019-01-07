@@ -1,6 +1,8 @@
 # plate-converter
 
-`Usage: convert24plate.py <inputfile> <outputfile>`
+Usage: 
+
+`convert24plate.py <inputfile> <outputfile>`
 
 `<inputfile> Name of the excel spreadsheet to convert`
 
