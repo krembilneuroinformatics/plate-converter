@@ -8,3 +8,8 @@ Usage:
 
 `<outputfile>` Name of the output file ending in .csv
 
+Prerequisites:
+
+`pip install click`
+
+`pip install openpyxl`
