@@ -10,6 +10,8 @@ Usage:
 
 Prerequisites:
 
+`python=3.6 or newer`
+
 `pip install click`
 
 `pip install openpyxl`
