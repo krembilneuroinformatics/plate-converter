@@ -5,8 +5,6 @@ from openpyxl import load_workbook
 @click.command()
 @click.argument('inputfile', nargs=1)
 @click.argument('outputfile', nargs=1)
-
-
 def main(inputfile, outputfile):
     # Loading Excel file
     wb = load_workbook(inputfile)
