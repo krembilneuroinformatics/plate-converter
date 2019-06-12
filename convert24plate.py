@@ -8,7 +8,8 @@ from openpyxl import load_workbook
 def main(inputfile, outputfile):
     # Loading Excel file
     wb = load_workbook(inputfile)
-    ws = wb.active
+    ws = wb['Sheet1']
+    ws2 = wb['Sheet2']
 
     # Assigning regions of data
     plate1L = ws['B5':'G12']
@@ -27,15 +28,23 @@ def main(inputfile, outputfile):
     barcode2c = [ws['P19'].value]
     barcode2d = [ws['P20'].value]
 
+    project_code = (ws['B28'].value + '_') if ws['B28'].value else ''
+
+    # Read Gender dictionary from Sheet2
+    gender_dict = {}
+    for i in ws2.values:
+        gender_dict[i[0]] = i[1]
+    gender_dict.pop('LabID', None)
+
     # Defining columns and populating with static data
-    sample_id = []
-    sentrix_barcode = barcode1a * 24 + barcode1b * 24 + barcode1c * 24 + barcode1d * 24 + \
+    sample_ids = []
+    genders = []
+    sentrix_barcodes = barcode1a * 24 + barcode1b * 24 + barcode1c * 24 + barcode1d * 24 + \
                     barcode2a * 24 + barcode2b * 24 + barcode2c * 24 + barcode2d * 24
 
     sentrix_pos = ['R01C01','R03C01','R05C01','R07C01','R09C01','R11C01','R02C01','R04C01','R06C01','R08C01','R10C01','R12C01',
                 'R01C02','R03C02','R05C02','R07C02','R09C02','R11C02','R02C02','R04C02','R06C02','R08C02','R10C02','R12C02']
     sentrix_pos *= 8
-
 
     sample_well = ['A01','A02','A03','A04','A05','A06','B01','B02','B03','B04','B05','B06','C01','C02','C03','C04','C05','C06','D01','D02','D03','D04','D05','D06',
                 'E01','E02','E03','E04','E05','E06','F01','F02','F03','F04','F05','F06','G01','G02','G03','G04','G05','G06','H01','H02','H03','H04','H05','H06',
@@ -44,23 +53,26 @@ def main(inputfile, outputfile):
     sample_well *= 2
 
 
-
     # Populating with data from spreadsheet
     for row in plate1L:
         for cell in row:
-            sample_id.append(cell.value)
+            sample_ids.append(project_code + str(cell.value))
+            genders.append(gender_dict[cell.value])
             
     for row in plate1R:
         for cell in row:
-            sample_id.append(cell.value)
+            sample_ids.append(project_code + str(cell.value))
+            genders.append(gender_dict[cell.value])
             
     for row in plate2L:
         for cell in row:
-            sample_id.append(cell.value)
+            sample_ids.append(project_code + str(cell.value))
+            genders.append(gender_dict[cell.value])
             
     for row in plate2R:
         for cell in row:
-            sample_id.append(cell.value)
+            sample_ids.append(project_code + str(cell.value))
+            genders.append(gender_dict[cell.value])
 
 
     #Creating CSV
@@ -77,8 +89,8 @@ def main(inputfile, outputfile):
         csvwriter.writerow(['','','','','','','','','','','','','',''])
         csvwriter.writerow(['[Data]','','','','','','','','','','','','',''])
         csvwriter.writerow(['Sample_ID','SentrixBarcode_A','SentrixPosition_A','Sample_Plate','Sample_Well','Sample_Group','Gender','Sample_Name','Replicate','Parent1','Parent2','','',''])
-        for sample, barcode, position, well in zip(sample_id, sentrix_barcode, sentrix_pos, sample_well):
-            csvwriter.writerow([sample, barcode, position, '', well, '', '', '', '', '', '', '', '', ''])
+        for sample, barcode, position, well, gender in zip(sample_ids, sentrix_barcodes, sentrix_pos, sample_well, genders):
+            csvwriter.writerow([sample, barcode, position, '', well, '', gender, '', '', '', '', '', '', ''])
         
     print('DONE')
 
